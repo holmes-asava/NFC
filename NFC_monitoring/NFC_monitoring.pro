@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2018-06-01T13:58:17
+# Project created by QtCreator 2018-06-01T15:33:54
 #
 #-------------------------------------------------
 
@@ -25,11 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
-    NFCwidget.cpp
+        mainwindow.cpp
 
 HEADERS += \
-        mainwindow.h \
-    nfcwidget.h
-
-FORMS +=
+        mainwindow.h

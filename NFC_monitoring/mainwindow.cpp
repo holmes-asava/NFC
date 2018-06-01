@@ -1,14 +1,11 @@
 #include "mainwindow.h"
 
-
-
-#include <QAction>
-#include <QFileDialog>
-#include <QMenuBar>
-MainWindow::MainWindow()
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
 {
-    nfcWidget = new NFCWidget;
-
-    setWindowTitle(tr("NFC Monitoring"));
 }
 
+MainWindow::~MainWindow()
+{
+
+}
