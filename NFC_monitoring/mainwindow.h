@@ -8,6 +8,9 @@
 #include<QGridLayout>
 #include<QLabel>
 #include<QLineEdit>
+#include<QGroupBox>
+#include<QTextEdit>
+#include<QTimer>
 namespace Ui {
 class MainWindow;
 }
@@ -17,10 +20,12 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    QTimer *timer;
     explicit MainWindow(QWidget *parent = 0);
 private slots:
     void handlelCon();
-
+    void handlelstop();
+    void update();
 private:
     QLabel *port;
     QWidget *window;
@@ -30,12 +35,22 @@ private:
     QPushButton *button2;
     QPushButton *button3;
 
+    QTextEdit *displaytext;
 
     QHBoxLayout *portlayout ;
     QHBoxLayout *statuslayout ;
     QHBoxLayout *buttonlayout ;
 
     QGridLayout *settinglayout ;
+    QGridLayout *displaylayout ;
+    QGridLayout *mainlayout;
+
+
+    QGroupBox *settingGP;
+    QGroupBox *displayGP;
+    int i;
+    int NFCdata;
+    bool NFCstart;
 
 };
 
