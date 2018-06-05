@@ -43,6 +43,45 @@ SerialPort::SerialPort(QObject *parent)
         }
         qDebug() << "TRF7970Aevm status: " << TRF7970Aevm_is_available;
 
+        if(TRF7970Aevm_is_available){
+                qDebug() << "Found the arduino port...\n";
+                TRF7970Aevm->setPortName(TRF7970Aevm_port_name);
+                TRF7970Aevm->open(QSerialPort::ReadWrite);
+                TRF7970Aevm->setBaudRate(QSerialPort::Baud115200);
+                TRF7970Aevm->setDataBits(QSerialPort::Data8);
+                TRF7970Aevm->setFlowControl(QSerialPort::NoFlowControl);
+                TRF7970Aevm->setParity(QSerialPort::NoParity);
+                TRF7970Aevm->setStopBits(QSerialPort::OneStop);
 
+                QString test = "010B000304142401000000";
+                bool ok;
+                int n = test.size();
+                QByteArray Sendbyte;
 
+                for (int i=0; i<=n/2-1; i++){
+                    QString a = test.mid(i*2,2);
+                    qint8 b = a.toInt(&ok,16);
+                    Sendbyte.append(b);
+                }
+
+                //qDebug() << Sendbyte;
+                TRF7970Aevm->write(Sendbyte);
+                while(1) {serialData = TRF7970Aevm->readAll();
+                qDebug() << serialData;}
+                qDebug() << Sendbyte;
+                //QObject::connect(TRF7970Aevm, SIGNAL(readyRead()), this, SLOT(readSerial()));
+            }else{
+                qDebug() << "Couldn't find the correct port for the arduino.\n";
+                //QMessageBox::information(this, "Serial Port Error", "Couldn't open serial port to arduino.");
+            }
 }
+
+void SerialPort::readSerial()
+{
+    serialData = TRF7970Aevm->readAll();
+    qDebug() << serialData;
+}
+
+
+
+
