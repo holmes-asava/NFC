@@ -5,8 +5,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 
 {       timer = new QTimer(this);
-        connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-        timer->start(1000);
+
         NFCstart=false;
         i=0;
         window  = new QWidget;
@@ -35,19 +34,40 @@ MainWindow::MainWindow(QWidget *parent) :
         settinglayout->addLayout(buttonlayout,2,0);
         settingGP= new QGroupBox("setting");
         settingGP->setLayout(settinglayout);
-        settingGP->show();
+       // settingGP->setSizePolicy(2000,2000);
 
-        displaytext     =new QTextEdit;
+        displaytext     =new QCustomPlot    ;
+        displaytext ->addGraph();
+        displaytext->graph(0)->setPen(QPen(QColor(40, 110, 255)));//set color
+        QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
+        timeTicker->setTimeFormat("%s");
+        displaytext->xAxis->setTicker(timeTicker);
+        displaytext->axisRect()->setupFullAxesBox();
+        displaytext->yAxis->setRange(0,1000);
+            // give the axes some labels:
+        displaytext ->xAxis->setLabel("time");
+        displaytext ->yAxis->setLabel("temp");
+            // set axes ranges, so we see all data:
+        connect( displaytext ->xAxis, SIGNAL(rangeChanged(QCPRange)), displaytext->xAxis2, SLOT(setRange(QCPRange)));
+        connect( displaytext ->yAxis, SIGNAL(rangeChanged(QCPRange)), displaytext->yAxis2, SLOT(setRange(QCPRange)));
+
+            // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
+        connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+        timer->start(10); // Interval 0 means
+
+
         displaylayout   =new QGridLayout ;
         displayGP       =new QGroupBox("monitor") ;
         displaylayout->addWidget(displaytext);
         displayGP->setLayout(displaylayout);
 
+      //  displayGP->setSizePolicy(2000,2000);
         mainlayout      =new QGridLayout ;
         mainlayout->addWidget(settingGP,0,0);
         mainlayout->addWidget(displayGP,1,0);
         window->setLayout(mainlayout);
         window->show();
+
 
 
 
@@ -83,9 +103,18 @@ void MainWindow::update()
 {
     if(NFCstart==true)
     {
-          NFCdata=i;
-          button2->setText(QString(NFCdata+48));
-          i=i+1;
+        displaytext->graph(0)->addData(i,i+1);
+        displaytext->xAxis->setRange(i, 100, Qt::AlignRight);
+        displaytext->replot();
+
+        if(i>800)
+        {i=0;
+        }
+        else
+        {
+            i=i+1;
+        }
+
 
 
     }

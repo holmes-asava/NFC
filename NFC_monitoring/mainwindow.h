@@ -11,6 +11,7 @@
 #include<QGroupBox>
 #include<QTextEdit>
 #include<QTimer>
+#include<qcustomplot.h>
 namespace Ui {
 class MainWindow;
 }
@@ -35,7 +36,7 @@ private:
     QPushButton *button2;
     QPushButton *button3;
 
-    QTextEdit *displaytext;
+    QCustomPlot *displaytext;
 
     QHBoxLayout *portlayout ;
     QHBoxLayout *statuslayout ;
