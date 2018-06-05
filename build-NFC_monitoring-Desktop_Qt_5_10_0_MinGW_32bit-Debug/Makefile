@@ -212,7 +212,10 @@ Makefile: ../NFC_monitoring/NFC_monitoring.pro C:/Qt/5.10.0/mingw53_32/mkspecs/w
 		C:/Qt/5.10.0/mingw53_32/mkspecs/features/qt_config.prf \
 		C:/Qt/5.10.0/mingw53_32/mkspecs/win32-g++/qmake.conf \
 		C:/Qt/5.10.0/mingw53_32/mkspecs/features/spec_post.prf \
+<<<<<<< Updated upstream
 		.qmake.stash \
+=======
+>>>>>>> Stashed changes
 		C:/Qt/5.10.0/mingw53_32/mkspecs/features/exclusive_builds.prf \
 		C:/Qt/5.10.0/mingw53_32/mkspecs/features/toolchain.prf \
 		C:/Qt/5.10.0/mingw53_32/mkspecs/features/default_pre.prf \
@@ -237,9 +240,15 @@ Makefile: ../NFC_monitoring/NFC_monitoring.pro C:/Qt/5.10.0/mingw53_32/mkspecs/w
 		C:/Qt/5.10.0/mingw53_32/mkspecs/features/lex.prf \
 		../NFC_monitoring/NFC_monitoring.pro \
 		C:/Qt/5.10.0/mingw53_32/lib/qtmaind.prl \
+<<<<<<< Updated upstream
 		C:/Qt/5.10.0/mingw53_32/lib/Qt5Widgets.prl \
 		C:/Qt/5.10.0/mingw53_32/lib/Qt5Gui.prl \
 		C:/Qt/5.10.0/mingw53_32/lib/Qt5SerialPort.prl \
+=======
+		C:/Qt/5.10.0/mingw53_32/lib/Qt5PrintSupport.prl \
+		C:/Qt/5.10.0/mingw53_32/lib/Qt5Widgets.prl \
+		C:/Qt/5.10.0/mingw53_32/lib/Qt5Gui.prl \
+>>>>>>> Stashed changes
 		C:/Qt/5.10.0/mingw53_32/lib/Qt5Core.prl
 	$(QMAKE) -o Makefile ..\NFC_monitoring\NFC_monitoring.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
 C:/Qt/5.10.0/mingw53_32/mkspecs/features/spec_pre.prf:
@@ -393,7 +402,10 @@ C:/Qt/5.10.0/mingw53_32/mkspecs/features/qt_functions.prf:
 C:/Qt/5.10.0/mingw53_32/mkspecs/features/qt_config.prf:
 C:/Qt/5.10.0/mingw53_32/mkspecs/win32-g++/qmake.conf:
 C:/Qt/5.10.0/mingw53_32/mkspecs/features/spec_post.prf:
+<<<<<<< Updated upstream
 .qmake.stash:
+=======
+>>>>>>> Stashed changes
 C:/Qt/5.10.0/mingw53_32/mkspecs/features/exclusive_builds.prf:
 C:/Qt/5.10.0/mingw53_32/mkspecs/features/toolchain.prf:
 C:/Qt/5.10.0/mingw53_32/mkspecs/features/default_pre.prf:
@@ -418,9 +430,15 @@ C:/Qt/5.10.0/mingw53_32/mkspecs/features/yacc.prf:
 C:/Qt/5.10.0/mingw53_32/mkspecs/features/lex.prf:
 ../NFC_monitoring/NFC_monitoring.pro:
 C:/Qt/5.10.0/mingw53_32/lib/qtmaind.prl:
+<<<<<<< Updated upstream
 C:/Qt/5.10.0/mingw53_32/lib/Qt5Widgets.prl:
 C:/Qt/5.10.0/mingw53_32/lib/Qt5Gui.prl:
 C:/Qt/5.10.0/mingw53_32/lib/Qt5SerialPort.prl:
+=======
+C:/Qt/5.10.0/mingw53_32/lib/Qt5PrintSupport.prl:
+C:/Qt/5.10.0/mingw53_32/lib/Qt5Widgets.prl:
+C:/Qt/5.10.0/mingw53_32/lib/Qt5Gui.prl:
+>>>>>>> Stashed changes
 C:/Qt/5.10.0/mingw53_32/lib/Qt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ..\NFC_monitoring\NFC_monitoring.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
