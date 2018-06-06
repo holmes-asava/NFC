@@ -1,6 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include "TRF7970A.h"
 #include <QMainWindow>
 #include<QWidget>
 #include<QPushButton>
@@ -45,7 +45,7 @@ private:
     QGridLayout *settinglayout ;
     QGridLayout *displaylayout ;
     QGridLayout *mainlayout;
-
+    TRF7970A *device;
 
     QGroupBox *settingGP;
     QGroupBox *displayGP;

@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
         settinglayout->addLayout(buttonlayout,2,0);
         settingGP= new QGroupBox("setting");
         settingGP->setLayout(settinglayout);
-       // settingGP->setSizePolicy(2000,2000);
+        settingGP->setFixedSize(900,200);
 
         displaytext     =new QCustomPlot    ;
         displaytext ->addGraph();
@@ -66,6 +66,7 @@ MainWindow::MainWindow(QWidget *parent) :
         mainlayout->addWidget(settingGP,0,0);
         mainlayout->addWidget(displayGP,1,0);
         window->setLayout(mainlayout);
+        window->setFixedSize(1000,1000);
         window->show();
 
 
