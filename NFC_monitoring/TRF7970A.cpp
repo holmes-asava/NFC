@@ -67,13 +67,23 @@ bool TRF7970A::configuring()
         arduino->setParity(QSerialPort::NoParity);
         arduino->setStopBits(QSerialPort::OneStop);
 
-        for(int i=1; i<2; i++)
+        for(int i=0; i<=5; i++)
         {
             switch (i) {
-            case 1: sendData = "0B000304142401000000";
+            case 0: sendData = "0108000304FF0000";
                 break;
-            default:
+            case 1: sendData = "010A0003041001210000";
                 break;
+            case 2: sendData = "010C00030410002101020000";
+                break;
+            case 3: sendData = "0109000304F0000000";
+                break;
+            case 4: sendData = "0109000304F1FF0000";
+                break;
+            case 5: sendData = "010B000304180220010000";
+                break; //inventory
+            //case 2: sendData = "01120003041820021052FE01000007E00000";
+              //  break; //quite
             }
             writeSerial();
             readSerial();
