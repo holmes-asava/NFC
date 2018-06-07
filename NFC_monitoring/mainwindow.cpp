@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 
 {       timer = new QTimer(this);
+        device = new TRF7970A;
 
         NFCstart=false;
         i=0;
@@ -80,7 +81,8 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::handlelCon()
 {
    // change the text
-   if(button1->text()=="Connect")
+   bool connect = device->configuring();
+   if(connect)
    {
    button1->setText("Example");
    button3->setEnabled(true);

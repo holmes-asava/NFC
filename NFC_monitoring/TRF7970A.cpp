@@ -26,11 +26,17 @@ TRF7970A::TRF7970A(QWidget *parent) :
         qDebug() << "Product ID: " << serialPortInfo.productIdentifier() << "\n";
     }
     */
+}
 
+TRF7970A::~TRF7970A()
+{
+    if(arduino->isOpen()){
+        arduino->close(); //    Close the serial port if it's open.
+    }
+}
 
-    /*
-     *   Identify the port the arduino uno is on.
-     */
+bool TRF7970A::configuring()
+{
     bool arduino_is_available = false;
     QString arduino_uno_port_name;
     //
@@ -46,6 +52,7 @@ TRF7970A::TRF7970A(QWidget *parent) :
             }
         }
     }
+    qDebug()<<arduino_is_available;
 
     /*
      *  Open and configure the arduino port if available
@@ -60,40 +67,48 @@ TRF7970A::TRF7970A(QWidget *parent) :
         arduino->setParity(QSerialPort::NoParity);
         arduino->setStopBits(QSerialPort::OneStop);
 
-        writeSerial();
-
-        QObject::connect(arduino, SIGNAL(readyRead()), this, SLOT(readSerial()));
-    }else{
-        qDebug() << "Couldn't find the correct port for the arduino.\n";
-        QMessageBox::information(this, "Serial Port Error", "Couldn't open serial port to arduino.");
+        for(int i=1; i<2; i++)
+        {
+            switch (i) {
+            case 1: sendData = "0B000304142401000000";
+                break;
+            default:
+                break;
+            }
+            writeSerial();
+            QObject::connect(arduino, SIGNAL(readyRead()), this, SLOT(readSerial()));
+        }
+        return true;
     }
-}
+    else{
+            qDebug() << "Couldn't find the correct port for the arduino.\n";
+            QMessageBox::information(this, "Serial Port Error", "Couldn't open serial port to arduino.");
 
-TRF7970A::~TRF7970A()
-{
-    if(arduino->isOpen()){
-        arduino->close(); //    Close the serial port if it's open.
-    }
-}
+            return false;
+        }
 
-void TRF7970A::readSerial()
-{
-    serialData = arduino->readLine();
-    qDebug() <<serialData ;
+
+
 }
 
 void TRF7970A::writeSerial()
 {
-    QString test = "0B000304142401000000";
     bool ok;
-    int n = test.size();
+    int n = sendData.size();
     QByteArray Sendbyte;
 
     for (int i=0; i<=n/2-1; i++){
-        QString a = test.mid(i*2,2);
+        QString a = sendData.mid(i*2,2);
         qint8 b = a.toInt(&ok,16);
         Sendbyte.append(b);
     }
     //qDebug() << Sendbyte;
     arduino->write(Sendbyte);
 }
+
+void TRF7970A::readSerial()
+{
+    serialData = arduino->readAll();
+    qDebug() <<serialData ;
+}
+
