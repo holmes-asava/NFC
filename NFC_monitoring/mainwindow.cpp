@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
         NFCstart=false;
         i=0;
+        device  = new TRF7970A;
         window  = new QWidget;
         port    = new QLabel("Port: none");
         status  = new QLabel("Status: Disconnect");
@@ -17,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
         button2->setEnabled(false);
         button3->setEnabled(false);
         connect(button1, SIGNAL (released()), this, SLOT (handlelCon()));
+        connect(button2, SIGNAL (released()), this, SLOT (handlelstart()));
         connect(button3, SIGNAL (released()), this, SLOT (handlelstop()));
         portlayout  = new QHBoxLayout ;
         statuslayout= new QHBoxLayout ;
@@ -34,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
         settinglayout->addLayout(buttonlayout,2,0);
         settingGP= new QGroupBox("setting");
         settingGP->setLayout(settinglayout);
-        settingGP->setFixedSize(900,200);
+        settingGP->setFixedSize(500,100);
 
         displaytext     =new QCustomPlot    ;
         displaytext ->addGraph();
@@ -66,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
         mainlayout->addWidget(settingGP,0,0);
         mainlayout->addWidget(displayGP,1,0);
         window->setLayout(mainlayout);
-        window->setFixedSize(1000,1000);
+        window->setFixedSize(600,600);
         window->show();
 
 
@@ -78,16 +80,30 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::handlelCon()
-{
+{   /* Serialstate = Serialstart();
+        if(Serialstare==1)
+      */
    // change the text
-   if(button1->text()=="Connect")
+   if(NFCstart==false)
    {
-   button1->setText("Example");
-   button3->setEnabled(true);
+   button1->setText("Conected");
+   button2->setEnabled(true);
 
-   NFCstart=true;
+
    }
-   i=0;
+}
+void MainWindow::handlelstart()
+{
+      // change the text
+      if(NFCstart==false)
+      {
+
+      button3->setEnabled(true);
+      button2->setEnabled(false);
+      NFCstart=true;
+      i=0;
+      }
+
 
 
 }
@@ -96,14 +112,14 @@ void MainWindow::handlelstop()
    // change the text
    NFCstart=false;
    button3->setEnabled(false);
-
+   button2->setEnabled(true);
 
 }
 
 void MainWindow::update()
 {
     if(NFCstart==true)
-    {
+    {   //
         displaytext->graph(0)->addData(i,i+1);
         displaytext->xAxis->setRange(i, 100, Qt::AlignRight);
         displaytext->replot();

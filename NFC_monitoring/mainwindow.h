@@ -26,6 +26,7 @@ public:
 private slots:
     void handlelCon();
     void handlelstop();
+    void handlelstart();
     void update();
 private:
     QLabel *port;
@@ -50,6 +51,7 @@ private:
     QGroupBox *settingGP;
     QGroupBox *displayGP;
     int i;
+    int Serialstate;
     int NFCdata;
     bool NFCstart;
 
