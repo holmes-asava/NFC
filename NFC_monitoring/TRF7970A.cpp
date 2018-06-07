@@ -76,7 +76,7 @@ bool TRF7970A::configuring()
                 break;
             }
             writeSerial();
-            QObject::connect(arduino, SIGNAL(readyRead()), this, SLOT(readSerial()));
+            readSerial();
         }
         return true;
     }
@@ -86,9 +86,6 @@ bool TRF7970A::configuring()
 
             return false;
         }
-
-
-
 }
 
 void TRF7970A::writeSerial()
@@ -112,3 +109,9 @@ void TRF7970A::readSerial()
     qDebug() <<serialData ;
 }
 
+void TRF7970A::plotGraph()
+{
+    sendData = "";
+    writeSerial();
+    readSerial();
+}

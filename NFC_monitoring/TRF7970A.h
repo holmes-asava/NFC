@@ -14,9 +14,8 @@ public:
     ~TRF7970A();
     bool configuring();
     void writeSerial();
-
-private slots:
     void readSerial();
+    void plotGraph();
 
 private:
     QSerialPort *arduino;
