@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 
 {       timer = new QTimer(this);
+        device = new TRF7970A;
 
         NFCstart=false;
         i=0;
@@ -84,7 +85,8 @@ void MainWindow::handlelCon()
         if(Serialstare==1)
       */
    // change the text
-   if(NFCstart==false)
+   bool connect = device->configuring();
+   if(connect)
    {
    button1->setText("Conected");
    button2->setEnabled(true);

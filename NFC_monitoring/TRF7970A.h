@@ -12,16 +12,17 @@ class TRF7970A : public QDialog
 public:
     explicit TRF7970A(QWidget *parent = 0);
     ~TRF7970A();
-
-private slots:
-    void readSerial();
+    bool configuring();
     void writeSerial();
+    void readSerial();
+    void plotGraph();
 
 private:
     QSerialPort *arduino;
     static const quint16 arduino_uno_vendor_id = 4292;
     static const quint16 arduino_uno_product_id = 60000;
     QByteArray serialData;
+    QString sendData;
 
 };
 
