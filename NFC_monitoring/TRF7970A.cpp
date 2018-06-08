@@ -67,21 +67,21 @@ bool TRF7970A::configuring()
         arduino->setParity(QSerialPort::NoParity);
         arduino->setStopBits(QSerialPort::OneStop);
 
-        for(int i=0; i<=5; i++)
+        for(int i=1; i<=3; i++)
         {
             switch (i) {
-            case 0: sendData = "0108000304FF0000";
-                break;
-            case 1: sendData = "010A0003041001210000";
+            //case 0: sendData = "0108000304FF0000";
+               // break;
+            case 1: sendData = "010C00030410003101000000";
                 break;
             case 2: sendData = "010C00030410002101020000";
                 break;
-            case 3: sendData = "0109000304F0000000";
-                break;
-            case 4: sendData = "0109000304F1FF0000";
-                break;
-            case 5: sendData = "010B000304180120910000";
-                break; //inventory
+            //case 3: sendData = "0109000304F0000000";
+               // break;
+            //case 4: sendData = "0109000304F1FF0000";
+                //break;
+            //case 3: sendData = "010B000304180220010000";
+              //  break;
             //case 2: sendData = "01120003041820021052FE01000007E00000";
               //  break; //quite
             }
@@ -100,15 +100,8 @@ bool TRF7970A::configuring()
 
 void TRF7970A::writeSerial()
 {
-    bool ok;
-    int n = sendData.size();
     QByteArray Sendbyte;
-
-    for (int i=0; i<=n/2-1; i++){
-        QString a = sendData.mid(i*2,2);
-        qint8 b = a.toInt(&ok,16);
-        Sendbyte.append(b);
-    }
+    Sendbyte.append(sendData);
     //qDebug() << Sendbyte;
     arduino->write(Sendbyte);
 }
@@ -121,7 +114,8 @@ void TRF7970A::readSerial()
 
 void TRF7970A::plotGraph()
 {
-    sendData = "";
+    sendData = "010B000304180220010000";
     writeSerial();
-    readSerial();
+    QObject::connect(arduino, SIGNAL(readyRead()), this, SLOT(readSerial()));
 }
+

@@ -14,6 +14,9 @@ public:
     ~TRF7970A();
     bool configuring();
     void writeSerial();
+    void plotGraph();
+
+private slots:
     void readSerial();
     void plotGraph();
 
