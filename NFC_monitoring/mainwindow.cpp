@@ -90,6 +90,7 @@ void MainWindow::handlelCon()
    {
    button1->setText("Conected");
    button2->setEnabled(true);
+   device->configuring();
 
 
    }

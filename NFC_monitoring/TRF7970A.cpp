@@ -80,13 +80,13 @@ bool TRF7970A::configuring()
                 break;
             case 4: sendData = "0109000304F1FF0000";
                 break;
-            case 5: sendData = "010B000304180220010000";
+            case 5: sendData = "010B000304180120910000";
                 break; //inventory
             //case 2: sendData = "01120003041820021052FE01000007E00000";
               //  break; //quite
             }
             writeSerial();
-            readSerial();
+              QObject::connect(arduino, SIGNAL(readyRead()), this, SLOT(readSerial()));
         }
         return true;
     }
