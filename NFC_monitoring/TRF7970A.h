@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QSerialPort>
 #include <QByteArray>
+#include<qcustomplot.h>
 
 class TRF7970A : public QDialog
 {
@@ -15,10 +16,10 @@ public:
     bool configuring();
     void writeSerial();
     void plotGraph();
-
+    QCustomPlot *displaytext;
 private slots:
     void readSerial();
-    void plotGraph();
+
 
 private:
     QSerialPort *arduino;
@@ -26,6 +27,7 @@ private:
     static const quint16 arduino_uno_product_id = 60000;
     QByteArray serialData;
     QString sendData;
+    int a;
 
 };
 

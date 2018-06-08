@@ -11,7 +11,8 @@
 #include<QGroupBox>
 #include<QTextEdit>
 #include<QTimer>
-#include<qcustomplot.h>
+
+
 namespace Ui {
 class MainWindow;
 }
@@ -23,6 +24,7 @@ class MainWindow : public QMainWindow
 public:
     QTimer *timer;
     explicit MainWindow(QWidget *parent = 0);
+
 private slots:
     void handlelCon();
     void handlelstop();
@@ -37,7 +39,7 @@ private:
     QPushButton *button2;
     QPushButton *button3;
 
-    QCustomPlot *displaytext;
+
 
     QHBoxLayout *portlayout ;
     QHBoxLayout *statuslayout ;
