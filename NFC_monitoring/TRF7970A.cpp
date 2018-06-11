@@ -18,7 +18,7 @@ TRF7970A::TRF7970A(QWidget *parent) :
     timeTicker->setTimeFormat("%s");
     displaytext->xAxis->setTicker(timeTicker);
     displaytext->axisRect()->setupFullAxesBox();
-    displaytext->yAxis->setRange(0,1000);
+    displaytext->yAxis->setRange(0,30);
         // give the axes some labels:
     displaytext ->xAxis->setLabel("time");
     displaytext ->yAxis->setLabel("temp");
@@ -80,13 +80,15 @@ bool TRF7970A::configuring()
         arduino->setParity(QSerialPort::NoParity);
         arduino->setStopBits(QSerialPort::OneStop);
 
-        for(int i=1;i<3; i++)
+        for(int i=1;i<4; i++)
         {
             switch (i) {
 
-            case 1: sendData = "010C00030410003101000000";
+            case 1: sendData = "010A0003041001210000";
                 break;
             case 2: sendData = "010C00030410002101020000";
+                break;
+            case 3:   sendData = "01130003041802210200002C00000000000000";
                 break;
 
             }
@@ -114,28 +116,35 @@ void TRF7970A::writeSerial()
 void TRF7970A::readSerial()
 {
     serialData = arduino->readAll();
-
-    if(serialData.data()[0]==0x5b)
+    int numsize=serialData.size();
+    if(numsize>0)
     {
-        char *text=new char[18];
-         for(int i=1;i<18;i++)
-        {
-            text[i-1]=serialData.data()[i];
-        }
-        qDebug() <<text ;
-        displaytext->graph(0)->addData(a,a+1);
+    qDebug()<<serialData;
+    if(serialData.data()[0]==0x5b)
+    {   qDebug()<<serialData;
+        float ref_value = (serialData.data()[5]-48)*(16*16*16)+(serialData.data()[6]-48)*(16*16)+(serialData.data()[3]-48)*16+(serialData.data()[4]-48);
+        float temp_value = (serialData.data()[9]-48)*(16*16*16)+(serialData.data()[10]-48)*(16*16)+(serialData.data()[7]-48)*16+(serialData.data()[8]-48);
+        float temp=(1.0 / (((log(temp_value/ref_value)) / 4250.0) + (1.0 / 298.15)) - 273.15);
+        qDebug()<<temp;
+        displaytext->graph(0)->addData(a,temp);
         displaytext->xAxis->setRange(a, 100, Qt::AlignRight);
         displaytext->replot();
         a=a+1;
 
 
     }
+    }
 }
 
 void TRF7970A::plotGraph()
 {
-    sendData = "010B000304180220020000";
+
+    sendData = "010C00030418022309010000";
     writeSerial();
+    //sendData = "01130003041802210001000400010100000000";
+    //writeSerial();
     QObject::connect(arduino, SIGNAL(readyRead()), this, SLOT(readSerial()));
+
+
 }
 

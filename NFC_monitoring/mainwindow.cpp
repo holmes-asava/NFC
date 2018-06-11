@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
             // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
         connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-        timer->start(500); // Interval 0 means
+        timer->start(1500); // Interval 0 means
 
 
         displaylayout   =new QGridLayout ;
