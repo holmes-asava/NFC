@@ -17,6 +17,9 @@ public:
     void writeSerial();
     void plotGraph();
     QCustomPlot *displaytext;
+    QCustomPlot *displaytext2;
+    QString arduino_uno_port_name;
+    void save();
 private slots:
     void readSerial();
 
@@ -28,7 +31,8 @@ private:
     QByteArray serialData;
     QString sendData;
     int a;
-
+    int state;
+    QString saveData;
 };
 
 #endif // DIALOG_H

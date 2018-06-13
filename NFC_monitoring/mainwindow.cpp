@@ -37,26 +37,27 @@ MainWindow::MainWindow(QWidget *parent) :
         settinglayout->addLayout(buttonlayout,2,0);
         settingGP= new QGroupBox("setting");
         settingGP->setLayout(settinglayout);
-        settingGP->setFixedSize(500,100);
+        settingGP->setFixedSize(300,15 0);
 
 
 
             // setup a timer that repeatedly calls MainWindow::realtimeDataSlot:
         connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-        timer->start(1500); // Interval 0 means
+         // Interval 0 means
 
 
         displaylayout   =new QGridLayout ;
         displayGP       =new QGroupBox("monitor") ;
-        displaylayout->addWidget(device->displaytext);
+        displaylayout->addWidget(device->displaytext,0,0);
+        displaylayout->addWidget(device->displaytext2,0,1);
         displayGP->setLayout(displaylayout);
 
       //  displayGP->setSizePolicy(2000,2000);
         mainlayout      =new QGridLayout ;
         mainlayout->addWidget(settingGP,0,0);
-        mainlayout->addWidget(displayGP,1,0);
+        mainlayout->addWidget(displayGP,1,0,1,2);
         window->setLayout(mainlayout);
-        window->setFixedSize(600,600);
+        window->setMinimumSize(800,500);
         window->show();
 
 
@@ -74,8 +75,13 @@ void MainWindow::handlelCon()
    {
    button1->setText("Conected");
    button2->setEnabled(true);
-   device->configuring();
+   port->setText("Port: "+ device->arduino_uno_port_name);
+   status->setText("Status: Connected");
 
+
+   }
+   else
+   {
 
    }
 }
@@ -88,6 +94,7 @@ void MainWindow::handlelstart()
       button3->setEnabled(true);
       button2->setEnabled(false);
       NFCstart=true;
+      timer->start(200);
 
       }
 
@@ -100,7 +107,8 @@ void MainWindow::handlelstop()
    NFCstart=false;
    button3->setEnabled(false);
    button2->setEnabled(true);
-
+   timer->stop();
+   device->save();
 }
 
 void MainWindow::update()

@@ -5,27 +5,50 @@
 #include <string>
 #include <QDebug>
 #include <QMessageBox>
-
+#include <QFile>
+#include <QTextStream>
 
 TRF7970A::TRF7970A(QWidget *parent) :
     QDialog(parent)
-{   a=0;
+{   state=0;
+    a=0;
     arduino = new QSerialPort(this);
-    displaytext     =new QCustomPlot    ;
+    sendData="";
+    displaytext =new QCustomPlot    ;
     displaytext ->addGraph();
     displaytext->graph(0)->setPen(QPen(QColor(40, 110, 255)));//set color
     QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
     timeTicker->setTimeFormat("%s");
     displaytext->xAxis->setTicker(timeTicker);
     displaytext->axisRect()->setupFullAxesBox();
-    displaytext->yAxis->setRange(0,30);
+    displaytext->yAxis->setRange(28,38);
+    displaytext->plotLayout()->insertRow(0);
+    displaytext->plotLayout()->addElement(0, 0, new QCPTextElement(displaytext, "temperature", QFont("Times",12,QFont::Light)));
         // give the axes some labels:
     displaytext ->xAxis->setLabel("time");
     displaytext ->yAxis->setLabel("temp");
         // set axes ranges, so we see all data:
     connect( displaytext ->xAxis, SIGNAL(rangeChanged(QCPRange)), displaytext->xAxis2, SLOT(setRange(QCPRange)));
     connect( displaytext ->yAxis, SIGNAL(rangeChanged(QCPRange)), displaytext->yAxis2, SLOT(setRange(QCPRange)));
+
+
+    displaytext2     =new QCustomPlot    ;
+    displaytext2 ->addGraph();
+    displaytext2->graph(0)->setPen(QPen(QColor(40, 110, 255)));//set color
+    displaytext2->xAxis->setTicker(timeTicker);
+    displaytext2->axisRect()->setupFullAxesBox();
+    displaytext2->yAxis->setRange(28,38);
+    displaytext2->plotLayout()->insertRow(0);
+    displaytext2->plotLayout()->addElement(0, 0, new QCPTextElement(displaytext2, "sensor", QFont("Times", 12, QFont::Light)));
+        // give the axes some labels:
+    displaytext2 ->xAxis->setLabel("time");
+    displaytext2 ->yAxis->setLabel("temp");
+        // set axes ranges, so we see all data:
+    connect( displaytext2 ->xAxis, SIGNAL(rangeChanged(QCPRange)), displaytext2->xAxis2, SLOT(setRange(QCPRange)));
+    connect( displaytext2 ->yAxis, SIGNAL(rangeChanged(QCPRange)), displaytext2->yAxis2, SLOT(setRange(QCPRange)));
+
     /*
+     *
      *  Testing code, prints the description, vendor id, and product id of all ports.
      *  Used it to determine the values for the arduino uno.
      *
@@ -51,7 +74,7 @@ TRF7970A::~TRF7970A()
 bool TRF7970A::configuring()
 {
     bool arduino_is_available = false;
-    QString arduino_uno_port_name;
+
     //
     //  For each available serial port
     foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
@@ -80,16 +103,12 @@ bool TRF7970A::configuring()
         arduino->setParity(QSerialPort::NoParity);
         arduino->setStopBits(QSerialPort::OneStop);
 
-        for(int i=1;i<4; i++)
+        for(int i=1;i<2; i++)
         {
-            switch (i) {
-
-            case 1: sendData = "010A0003041001210000";
-                break;
-            case 2: sendData = "010C00030410002101020000";
-                break;
-            case 3:   sendData = "01130003041802210200002C00000000000000";
-                break;
+            switch (i)
+            {   //write register default
+            case 1: sendData = "010C00030410002101020000";
+                    break;
 
             }
             writeSerial();
@@ -119,17 +138,47 @@ void TRF7970A::readSerial()
     int numsize=serialData.size();
     if(numsize>0)
     {
-    qDebug()<<serialData;
-    if(serialData.data()[0]==0x5b)
+
+    if((serialData.data()[0]==0x5b)&&(numsize>15))
+            //&&serialData.data()[19]==0x5d)
     {   qDebug()<<serialData;
-        float ref_value = (serialData.data()[5]-48)*(16*16*16)+(serialData.data()[6]-48)*(16*16)+(serialData.data()[3]-48)*16+(serialData.data()[4]-48);
-        float temp_value = (serialData.data()[9]-48)*(16*16*16)+(serialData.data()[10]-48)*(16*16)+(serialData.data()[7]-48)*16+(serialData.data()[8]-48);
-        float temp=(1.0 / (((log(temp_value/ref_value)) / 4250.0) + (1.0 / 298.15)) - 273.15);
+        int dec[8];
+        for(int k=3;k<11;k++)
+        {   if((serialData.data()[k]>=65)&&serialData.data()[k]<=70)
+            {dec[k-3]=serialData.data()[k]-55;}
+            else
+            {
+            dec[k-3]=serialData.data()[k]-48;
+            }
+
+        }
+
+
+        float ref_value = (dec[2])*(16*16*16)+(dec[3])*(16*16)+(dec[0])*16+(dec[1]);
+
+        float temp_value = (dec[6])*(16*16*16)+(dec[7])*(16*16)+(dec[4])*16+(dec[5]);
+        qDebug()<<temp_value;
+        qDebug()<<ref_value;
+        /*if(dec[2]>=2)
+        {
+           ref_value=ref_value-(2*8192);
+        }
+        if(dec[6]>=2)
+        {
+           temp_value=temp_value-(2*8192);
+        }
+        */
+
+        float temp= 298.15*4330/((298.15*(log(temp_value/ref_value))) + 4330.0) - 273.15;
         qDebug()<<temp;
         displaytext->graph(0)->addData(a,temp);
-        displaytext->xAxis->setRange(a, 100, Qt::AlignRight);
+        displaytext->xAxis->setRange(a, 100,Qt::AlignRight);
         displaytext->replot();
         a=a+1;
+        QString str = QString::number(temp);
+        saveData.append(str);
+        saveData.append(" \n ");
+        qDebug()<<saveData;
 
 
     }
@@ -138,13 +187,34 @@ void TRF7970A::readSerial()
 
 void TRF7970A::plotGraph()
 {
-
-    sendData = "010C00030418022309010000";
+    if(state!=0)
+    {
+        sendData = "010C00030418022309000000";
     writeSerial();
-    //sendData = "01130003041802210001000400010100000000";
-    //writeSerial();
     QObject::connect(arduino, SIGNAL(readyRead()), this, SLOT(readSerial()));
+    state=state+1;
+    }
+    else
+    {//write block0
+    sendData = "01130003041802210001000300010100400000";
+    writeSerial();
+    QObject::connect(arduino, SIGNAL(readyRead()), this, SLOT(readSerial()));
+    state=state+1;
+    }
+    state=state%2;
+}
 
+void TRF7970A::save()
+{
+    QString filename = "Data.txt";
+       QFile file(filename);
+       if (file.open(QIODevice::ReadWrite))
+       {
+           QTextStream stream(&file);
+           stream << saveData << endl;
+       }
 
 }
+
+
 
