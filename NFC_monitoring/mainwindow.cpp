@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
         settinglayout->addLayout(buttonlayout,2,0);
         settingGP= new QGroupBox("setting");
         settingGP->setLayout(settinglayout);
-        settingGP->setFixedSize(300,15 0);
+        settingGP->setFixedSize(300,150);
 
 
 
