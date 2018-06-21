@@ -178,7 +178,7 @@ void TRF7970A::readSerial()
         QString str = QString::number(temp);
         saveData.append(str);
         saveData.append(" \n ");
-        qDebug()<<saveData;
+        //qDebug()<<saveData;
 
 
     }

@@ -90,11 +90,19 @@ void MainWindow::handlelstart()
       // change the text
       if(NFCstart==false)
       {
-
+      button2->setText("Pause");
       button3->setEnabled(true);
-      button2->setEnabled(false);
+
       NFCstart=true;
       timer->start(200);
+
+      }
+      else
+      {
+      button2->setText("Start");
+
+      NFCstart=false;
+
 
       }
 
@@ -103,19 +111,24 @@ void MainWindow::handlelstart()
 }
 void MainWindow::handlelstop()
 {
-   // change the text
+
    NFCstart=false;
    button3->setEnabled(false);
    button2->setEnabled(true);
    timer->stop();
-   device->save();
-}
+   device->a=0;
+   device->displaytext->clearPlottables();
 
+}
 void MainWindow::update()
 {
     if(NFCstart==true)
     {   device->plotGraph();
 
+    }
+    else
+    {
+        device->a=device->a+1;
     }
 }
 

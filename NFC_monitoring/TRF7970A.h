@@ -20,6 +20,7 @@ public:
     QCustomPlot *displaytext2;
     QString arduino_uno_port_name;
     void save();
+    int a;
 private slots:
     void readSerial();
 
@@ -30,7 +31,7 @@ private:
     static const quint16 arduino_uno_product_id = 60000;
     QByteArray serialData;
     QString sendData;
-    int a;
+
     int state;
     QString saveData;
 };
