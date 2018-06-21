@@ -16,11 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
         button1 = new QPushButton("Connect",this);
         button2 = new QPushButton("Start");
         button3 = new QPushButton("Stop");
+        saveButton = new QPushButton("Save");
         button2->setEnabled(false);
         button3->setEnabled(false);
         connect(button1, SIGNAL (released()), this, SLOT (handlelCon()));
         connect(button2, SIGNAL (released()), this, SLOT (handlelstart()));
         connect(button3, SIGNAL (released()), this, SLOT (handlelstop()));
+        connect(saveButton, SIGNAL (released()), this, SLOT (handlelsave()));
         portlayout  = new QHBoxLayout ;
         statuslayout= new QHBoxLayout ;
         buttonlayout= new QHBoxLayout ;
@@ -31,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
         buttonlayout->addWidget(button1);
         buttonlayout->addWidget(button2);
         buttonlayout->addWidget(button3);
+        buttonlayout->addWidget(saveButton);
         settinglayout=new QGridLayout ;
         settinglayout->addLayout(portlayout,0,0);
         settinglayout->addLayout(statuslayout,1,0);
@@ -108,7 +111,11 @@ void MainWindow::handlelstop()
    button3->setEnabled(false);
    button2->setEnabled(true);
    timer->stop();
-   device->save();
+}
+
+void MainWindow::handlelsave()
+{
+    device->save();
 }
 
 void MainWindow::update()

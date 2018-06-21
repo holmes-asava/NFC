@@ -29,6 +29,7 @@ private slots:
     void handlelCon();
     void handlelstop();
     void handlelstart();
+    void handlelsave();
     void update();
 private:
     QLabel *port;
@@ -38,8 +39,7 @@ private:
     QPushButton *button1;
     QPushButton *button2;
     QPushButton *button3;
-
-
+    QPushButton *saveButton;
 
     QHBoxLayout *portlayout ;
     QHBoxLayout *statuslayout ;

@@ -206,14 +206,24 @@ void TRF7970A::plotGraph()
 
 void TRF7970A::save()
 {
-    QString filename = "Data.txt";
-       QFile file(filename);
-       if (file.open(QIODevice::ReadWrite))
-       {
-           QTextStream stream(&file);
-           stream << saveData << endl;
-       }
+    QString fileName = QFileDialog::getSaveFileName(this,
+           tr("Save Data"), "",
+           tr("text (*.txt);;All Files (*)"));
 
+    if (fileName.isEmpty())
+           return;
+       else {
+           QFile file(fileName);
+           if (!file.open(QIODevice::WriteOnly)) {
+               QMessageBox::information(this, tr("Unable to open file"),
+                   file.errorString());
+               return;
+           }
+
+           QDataStream out(&file);
+           out.setVersion(QDataStream::Qt_4_5);
+           out << saveData;
+       }
 }
 
 
