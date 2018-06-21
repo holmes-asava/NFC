@@ -111,13 +111,17 @@ void MainWindow::handlelstart()
 }
 void MainWindow::handlelstop()
 {
-
+   button2->setText("Start");
    NFCstart=false;
    button3->setEnabled(false);
    button2->setEnabled(true);
    timer->stop();
+
+   device->displaytext->removeGraph(0);
+   device->displaytext->addGraph(0);
+   device->displaytext->graph(0)->setPen(QPen(QColor(40, 110, 255)));
    device->a=0;
-   device->displaytext->clearPlottables();
+   device->saveData.clear();
 
 }
 void MainWindow::update()
@@ -127,8 +131,9 @@ void MainWindow::update()
 
     }
     else
-    {
+    {   device->displaytext->graph(0)->addData(device->a,0);
         device->a=device->a+1;
+        qDebug()<<device->a;
     }
 }
 

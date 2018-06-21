@@ -21,6 +21,7 @@ public:
     QString arduino_uno_port_name;
     void save();
     int a;
+    QString saveData;
 private slots:
     void readSerial();
 
@@ -33,7 +34,7 @@ private:
     QString sendData;
 
     int state;
-    QString saveData;
+
 };
 
 #endif // DIALOG_H

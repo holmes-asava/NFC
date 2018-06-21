@@ -21,7 +21,7 @@ TRF7970A::TRF7970A(QWidget *parent) :
     timeTicker->setTimeFormat("%s");
     displaytext->xAxis->setTicker(timeTicker);
     displaytext->axisRect()->setupFullAxesBox();
-    displaytext->yAxis->setRange(28,38);
+    displaytext->yAxis->setRange(20,38);
     displaytext->plotLayout()->insertRow(0);
     displaytext->plotLayout()->addElement(0, 0, new QCPTextElement(displaytext, "temperature", QFont("Times",12,QFont::Light)));
         // give the axes some labels:
