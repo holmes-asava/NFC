@@ -97,6 +97,7 @@ void MainWindow::handlelstart()
       button3->setEnabled(true);
 
       NFCstart=true;
+      device->saveData.clear();
       timer->start(200);
 
       }
@@ -124,7 +125,7 @@ void MainWindow::handlelstop()
    device->displaytext->addGraph(0);
    device->displaytext->graph(0)->setPen(QPen(QColor(40, 110, 255)));
    device->a=0;
-   device->saveData.clear();
+
 
 }
 void MainWindow::handlelsave()

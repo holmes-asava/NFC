@@ -223,6 +223,9 @@ void TRF7970A::save()
            QDataStream out(&file);
            out.setVersion(QDataStream::Qt_4_5);
            out << saveData;
+           QMessageBox msgBox;
+           msgBox.setText("Save Complete");
+           msgBox.exec();
        }
 }
 
